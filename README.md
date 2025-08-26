@@ -1,68 +1,54 @@
-# 🚀 Welcome to Z.ai Code Scaffold
+# ✂️ Paragraph Splitter
 
-A modern, production-ready web application scaffold powered by cutting-edge technologies, designed to accelerate your development with [Z.ai](https://chat.z.ai)'s AI-powered coding assistance.
+A sophisticated web application for intelligently splitting Tamil text, with special focus on processing Bible verses, page numbers, and English words. Built with Next.js and TypeScript for a modern, responsive user experience.
 
-## ✨ Technology Stack
+![Paragraph Splitter Demo](public/app-screenshot.png)
 
-This scaffold provides a robust foundation built with:
+## ✨ Features
 
-### 🎯 Core Framework
-- **⚡ Next.js 15** - The React framework for production with App Router
-- **📘 TypeScript 5** - Type-safe JavaScript for better developer experience
-- **🎨 Tailwind CSS 4** - Utility-first CSS framework for rapid UI development
+### 🎯 Smart Text Processing
+- **Bible Verse Detection**: Automatically identifies and separates Bible verse references (e.g., `(John 3:16)`)
+- **Page Number Extraction**: Recognizes and isolates page numbers in square brackets (e.g., `[42]`)
+- **English Word Isolation**: Detects and separates English words in parentheses (e.g., `(word)`)
+- **Tamil Text Segmentation**: Intelligently splits regular Tamil text content
 
-### 🧩 UI Components & Styling
-- **🧩 shadcn/ui** - High-quality, accessible components built on Radix UI
-- **🎯 Lucide React** - Beautiful & consistent icon library
-- **🌈 Framer Motion** - Production-ready motion library for React
-- **🎨 Next Themes** - Perfect dark mode in 2 lines of code
+### 🎨 Modern UI/UX
+- **Beautiful Interface**: Clean, modern design with gradient backgrounds and smooth animations
+- **Responsive Design**: Works seamlessly on desktop and mobile devices
+- **Tamil Font Support**: Optimized for Tamil text with Tiro Tamil font
+- **Interactive Elements**: Hover effects, loading states, and smooth transitions
 
-### 📋 Forms & Validation
-- **🎣 React Hook Form** - Performant forms with easy validation
-- **✅ Zod** - TypeScript-first schema validation
-
-### 🔄 State Management & Data Fetching
-- **🐻 Zustand** - Simple, scalable state management
-- **🔄 TanStack Query** - Powerful data synchronization for React
-- **🌐 Axios** - Promise-based HTTP client
-
-### 🗄️ Database & Backend
-- **🗄️ Prisma** - Next-generation Node.js and TypeScript ORM
-- **🔐 NextAuth.js** - Complete open-source authentication solution
-
-### 🎨 Advanced UI Features
-- **📊 TanStack Table** - Headless UI for building tables and datagrids
-- **🖱️ DND Kit** - Modern drag and drop toolkit for React
-- **📊 Recharts** - Redefined chart library built with React and D3
-- **🖼️ Sharp** - High performance image processing
-
-### 🌍 Internationalization & Utilities
-- **🌍 Next Intl** - Internationalization library for Next.js
-- **📅 Date-fns** - Modern JavaScript date utility library
-- **🪝 ReactUse** - Collection of essential React hooks for modern development
-
-## 🎯 Why This Scaffold?
-
-- **🏎️ Fast Development** - Pre-configured tooling and best practices
-- **🎨 Beautiful UI** - Complete shadcn/ui component library with advanced interactions
-- **🔒 Type Safety** - Full TypeScript configuration with Zod validation
-- **📱 Responsive** - Mobile-first design principles with smooth animations
-- **🗄️ Database Ready** - Prisma ORM configured for rapid backend development
-- **🔐 Auth Included** - NextAuth.js for secure authentication flows
-- **📊 Data Visualization** - Charts, tables, and drag-and-drop functionality
-- **🌍 i18n Ready** - Multi-language support with Next Intl
-- **🚀 Production Ready** - Optimized build and deployment settings
-- **🤖 AI-Friendly** - Structured codebase perfect for AI assistance
+### 🛠️ Technical Features
+- **Copy to Clipboard**: Individual segment copying and bulk copy functionality
+- **Real-time Processing**: Instant text splitting with visual feedback
+- **Error Handling**: Comprehensive error handling with user-friendly messages
+- **Performance Optimized**: Efficient regex-based processing for large text inputs
 
 ## 🚀 Quick Start
 
+### Prerequisites
+- Node.js 18+
+- npm or yarn
+
+### Installation
+
 ```bash
+# Clone the repository
+git clone <your-repo-url>
+cd paragraph-splitter
+
 # Install dependencies
 npm install
 
 # Start development server
 npm run dev
+```
 
+Open [http://localhost:3000](http://localhost:3000) to see the application running.
+
+### Production Build
+
+```bash
 # Build for production
 npm run build
 
@@ -70,72 +56,123 @@ npm run build
 npm start
 ```
 
-Open [http://localhost:3000](http://localhost:3000) to see your application running.
+## 📋 Usage
 
-## 🤖 Powered by Z.ai
+1. **Input Text**: Paste your Tamil text containing Bible verses, page numbers, or English words into the textarea
+2. **Split**: Click the "Split Paragraph" button to process the text
+3. **Review Results**: View the intelligently separated segments with automatic categorization
+4. **Copy**: Use individual copy buttons or "Copy All" to export the processed text
 
-This scaffold is optimized for use with [Z.ai](https://chat.z.ai) - your AI assistant for:
+### Example Input
+```
+இது ஒரு மாதிரி உரை [42] இதில் (John 3:16) மற்றும் (Genesis 1:1-5) போன்ற வசனங்கள் உள்ளன. இவை தனித்தனியாக பிரிக்கப்படும் (word) இந்த உரையில்.
+```
 
-- **💻 Code Generation** - Generate components, pages, and features instantly
-- **🎨 UI Development** - Create beautiful interfaces with AI assistance  
-- **🔧 Bug Fixing** - Identify and resolve issues with intelligent suggestions
-- **📝 Documentation** - Auto-generate comprehensive documentation
-- **🚀 Optimization** - Performance improvements and best practices
+### Example Output
+- **Text Segment**: `இது ஒரு மாதிரி உரை`
+- **Page Number**: `[42]`
+- **Verse Reference**: `(John 3:16)`
+- **Verse Reference**: `(Genesis 1:1-5)`
+- **Text Segment**: `மற்றும் வசனங்கள் உள்ளன. இவை தனித்தனியாக பிரிக்கப்படும்`
+- **English Word**: `(word)`
+- **Text Segment**: `இந்த உரையில்.`
 
-Ready to build something amazing? Start chatting with Z.ai at [chat.z.ai](https://chat.z.ai) and experience the future of AI-powered development!
+## 🏗️ Technology Stack
+
+### Frontend Framework
+- **Next.js 15** - React framework with App Router
+- **React 19** - UI library
+- **TypeScript** - Type-safe development
+
+### Styling & UI
+- **Tailwind CSS 4** - Utility-first CSS framework
+- **shadcn/ui** - High-quality React components
+- **Lucide React** - Beautiful icon library
+- **Google Fonts** - Tiro Tamil, Inter, and Lexend fonts
+
+### Development Tools
+- **ESLint** - Code linting
+- **PostCSS** - CSS processing
+- **tsx** - TypeScript execution
+- **Nodemon** - Development server auto-restart
 
 ## 📁 Project Structure
 
 ```
-src/
-├── app/                 # Next.js App Router pages
-├── components/          # Reusable React components
-│   └── ui/             # shadcn/ui components
-├── hooks/              # Custom React hooks
-└── lib/                # Utility functions and configurations
+paragraph-splitter/
+├── src/
+│   ├── app/                 # Next.js App Router
+│   │   ├── globals.css      # Global styles
+│   │   ├── layout.tsx       # Root layout
+│   │   ├── page.tsx         # Main page component
+│   │   └── favicon.ico      # App icon
+│   ├── components/
+│   │   ├── ui/             # shadcn/ui components
+│   │   │   ├── button.tsx
+│   │   │   ├── card.tsx
+│   │   │   ├── textarea.tsx
+│   │   │   └── toast.tsx
+│   │   └── toaster.tsx
+│   └── hooks/
+│       └── use-toast.ts     # Toast notification hook
+├── public/                  # Static assets
+│   ├── logo.svg
+│   └── robots.txt
+└── server.ts               # Custom server configuration
 ```
 
-## 🎨 Available Features & Components
+## 🎯 How It Works
 
-This scaffold includes a comprehensive set of modern web development tools:
+The application uses sophisticated regular expressions to identify different types of content:
 
-### 🧩 UI Components (shadcn/ui)
-- **Layout**: Card, Separator, Aspect Ratio, Resizable Panels
-- **Forms**: Input, Textarea, Select, Checkbox, Radio Group, Switch
-- **Feedback**: Alert, Toast (Sonner), Progress, Skeleton
-- **Navigation**: Breadcrumb, Menubar, Navigation Menu, Pagination
-- **Overlay**: Dialog, Sheet, Popover, Tooltip, Hover Card
-- **Data Display**: Badge, Avatar, Calendar
+1. **Verse References**: Detects patterns like `(Book Chapter:Verse)` with support for ranges
+2. **Page Numbers**: Identifies square bracket enclosed numbers `[42]`
+3. **English Words**: Recognizes parenthesized alphabetic strings `(word)`
+4. **Text Segments**: Splits regular text at detected boundaries
 
-### 📊 Advanced Data Features
-- **Tables**: Powerful data tables with sorting, filtering, pagination (TanStack Table)
-- **Charts**: Beautiful visualizations with Recharts
-- **Forms**: Type-safe forms with React Hook Form + Zod validation
+The processing algorithm preserves the original text while intelligently separating structured content for better readability and processing.
 
-### 🎨 Interactive Features
-- **Animations**: Smooth micro-interactions with Framer Motion
-- **Drag & Drop**: Modern drag-and-drop functionality with DND Kit
-- **Theme Switching**: Built-in dark/light mode support
+## 🚀 Deployment
 
-### 🔐 Backend Integration
-- **Authentication**: Ready-to-use auth flows with NextAuth.js
-- **Database**: Type-safe database operations with Prisma
-- **API Client**: HTTP requests with Axios + TanStack Query
-- **State Management**: Simple and scalable with Zustand
+### Netlify (Recommended)
+This project is configured for easy deployment on Netlify:
 
-### 🌍 Production Features
-- **Internationalization**: Multi-language support with Next Intl
-- **Image Optimization**: Automatic image processing with Sharp
-- **Type Safety**: End-to-end TypeScript with Zod validation
-- **Essential Hooks**: 100+ useful React hooks with ReactUse for common patterns
+```bash
+# Build the project
+npm run build
 
-## 🤝 Get Started with Z.ai
+# Deploy to Netlify
+# Connect your repository to Netlify for automatic deployments
+```
 
-1. **Clone this scaffold** to jumpstart your project
-2. **Visit [chat.z.ai](https://chat.z.ai)** to access your AI coding assistant
-3. **Start building** with intelligent code generation and assistance
-4. **Deploy with confidence** using the production-ready setup
+### Manual Deployment
+```bash
+# Build static files
+npm run build
+
+# Serve static files
+npm run serve:static
+```
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📝 License
+
+This project is open source and available under the [MIT License](LICENSE).
+
+## 🙏 Acknowledgments
+
+- **Tiro Tamil Font** - For beautiful Tamil typography support
+- **shadcn/ui** - For the amazing component library
+- **Next.js** - For the robust React framework
+- **Tailwind CSS** - For the utility-first CSS approach
 
 ---
 
-Built with ❤️ for the developer community. Supercharged by [Z.ai](https://chat.z.ai) 🚀
+Built with ❤️ for Tamil text processing. Powered by DevT3.
