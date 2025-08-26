@@ -1,5 +1,10 @@
 {
       "cSpell.words": [
             "sonner"
-      ]
+      ],
+      "workbench.editor.autoLockGroups": {
+            "workbench.editor.chatSession": false
+      },
+      "workbench.editor.tabActionLocation": "right",
+      "workbench.editor.tabSizing": "fit"
 }
