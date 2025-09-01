@@ -124,9 +124,11 @@ export default function ParagraphSplitter() {
     ];
     const bookNamesPattern = bibleBooks.join('|');
     const bibleVersePattern = `(?:${bookNamesPattern})\\s+\\d+:\\d+(?:(?:-|,)\\d+)*`;
+    const parenthesizedEnglishPhraseRegex = /\([A-Za-z\s]+\)/; // Allows spaces within parentheses
+    const standaloneEnglishWordRegex = /(?<![\[(])\b[A-Za-z]+\b(?![\])])/; // Detects standalone English words not in brackets
 
     const finalSegments: string[] = [];
-    const combinedRegex = new RegExp(`(\\(.*?\\)|\\[.*?\]|${bibleVersePattern})`, 'g');
+    const combinedRegex = new RegExp(`(${parenthesizedEnglishPhraseRegex.source}|${standaloneEnglishWordRegex.source}|${bibleVersePattern}|\\[.*?\\])`, 'g');
     let lastIndex = 0;
     let currentAccumulatedText = '';
     let match: RegExpExecArray | null;
@@ -136,7 +138,9 @@ export default function ParagraphSplitter() {
       const capturedSegment = match[0];
 
       const isPageNumber = /^\[[^\]]*\]$/.test(capturedSegment);
-      const isEnglishWord = /^\([A-Za-z]+\)$/.test(capturedSegment);
+      const isParenthesizedEnglishPhrase = parenthesizedEnglishPhraseRegex.test(capturedSegment);
+      const isStandaloneEnglishWord = standaloneEnglishWordRegex.test(capturedSegment);
+      const isEnglishWord = isParenthesizedEnglishPhrase || isStandaloneEnglishWord;
 
       let contentToCheckForVerse = capturedSegment;
       if (capturedSegment.startsWith('(') && capturedSegment.endsWith(')')) {
@@ -374,7 +378,7 @@ export default function ParagraphSplitter() {
                           <span className="text-xs text-gray-500 font-medium">
                             {segment.startsWith('(') && segment.includes(':') ? 'Verse Reference' :
                              segment.startsWith('[') ? 'Page Number' :
-                             segment.startsWith('(') && /^[A-Za-z]+$/.test(segment.slice(1, -1)) ? 'English Word' : 'Text Segment'}
+                             (segment.startsWith('(') && segment.endsWith(')') && /[A-Za-z\s]+/.test(segment.slice(1, -1))) || /^[A-Za-z]+$/.test(segment) ? 'English Word' : 'Text Segment'}
                           </span>
                         </div>
                         <p className="text-gray-800 text-base leading-relaxed break-words" style={{ fontFamily: '"Tiro Tamil", serif' }}>
