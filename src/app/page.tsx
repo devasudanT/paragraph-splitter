@@ -39,6 +39,79 @@ export default function ParagraphSplitter() {
     };
   }, []);
 
+  const bibleBooks = [
+    'ஆதியாகமம்', 'ஆதி.',
+    'யாத்திராகமம்', 'யாத்.',
+    'லேவியராகமம்', 'லேவி.',
+    'எண்ணாகமம்', 'எண்.',
+    'உபாகமம்', 'உபா.',
+    'யோசுவா', 'யோசு.',
+    'நியாயாதிபதிகள்', 'நியா.',
+    'ரூத்', 'ரூத்.',
+    '1 சாமுவேல்', '1 சாமு.',
+    '2 சாமுவேல்', '2 சாமு.',
+    '1 இராஜாக்கள்', '1 இரா.',
+    '2 இராஜாக்கள்', '2 இரா.',
+    '1 நாளாகமம்', '1 நாளா.',
+    '2 நாளாகமம்', '2 நாளா.',
+    'எஸ்றா', 'எஸ்றா.',
+    'நெகேமியா', 'நெகே.',
+    'எஸ்தர்', 'எஸ்தர்.',
+    'யோபு', 'யோபு.',
+    'சங்கீதம்', 'சங்.',
+    'நீதிமொழிகள்', 'நீதி.',
+    'பிரசங்கி', 'பிரச.',
+    'உன்னதப்பாட்டு', 'உன்ன.',
+    'ஏசாயா', 'ஏசா.',
+    'எரேமியா', 'எரே.',
+    'புலம்பல்', 'புலம்.',
+    'எசேக்கியேல்', 'எசே.',
+    'தானியேல்', 'தானி.',
+    'ஓசியா', 'ஓசி.',
+    'யோவேல்', 'யோவே.',
+    'ஆமோஸ்', 'ஆமோ.',
+    'ஒபதியா', 'ஒப.',
+    'யோனா', 'யோனா.',
+    'மீகா', 'மீகா.',
+    'நாகூம்', 'நாகூ.',
+    'ஆபகூக்', 'ஆப.',
+    'செப்பனியா', 'செப்.',
+    'ஆகாய்', 'ஆகா.',
+    'சகரியா', 'சக.',
+    'மல்கியா', 'மல்.',
+    'மத்தேயு', 'மத்.',
+    'மாற்கு', 'மாற்.',
+    'லூக்கா', 'லூக்.',
+    'யோவான்', 'யோவா.',
+    'அப்போஸ்தலர்', 'அப்.',
+    'ரோமர்', 'ரோம.',
+    '1 கொரிந்தியர்', '1 கொரி.',
+    '2 கொரிந்தியர்', '2 கொரி.',
+    'கலாத்தியர்', 'கலா.',
+    'எபேசியர்', 'எபேசி.',
+    'பிலிப்பியர்', 'பிலி.',
+    'கொலோசெயர்', 'கொலோ.',
+    '1 தெசலோனிக்கேயர்', '1 தெச.',
+    '2 தெசலோனிக்கேயர்', '2 தெச.',
+    '1 தீமோத்தேயு', '1 தீமோ.',
+    '2 தீமோத்தேயு', '2 தீமோ.',
+    'தீத்து', 'தீத்.',
+    'பிலேமோன்', 'பிலே.',
+    'எபிரெயர்', 'எபி.',
+    'யாக்கோபு', 'யாக்.',
+    '1 பேதுரு', '1 பேது.',
+    '2 பேதுரு', '2 பேது.',
+    '1 யோவான்', '1 யோவா.',
+    '2 யோவான்', '2 யோவா.',
+    '3 யோவான்', '3 யோவா.',
+    'யூதா', 'யூதா.',
+    'வெளிப்படுத்தல்', 'வெளி.'
+  ];
+  const bookNamesPattern = bibleBooks.join('|');
+  const bibleVersePattern = `\\(?(?:${bookNamesPattern})\\s+\\d+:\\d+(?:(?:-|,)\\d+)*\\)?`; // Modified to include optional parentheses
+  const parenthesizedEnglishPhraseRegex = /\([A-Za-z\s]+\)/; // Allows spaces within parentheses
+  const standaloneEnglishWordRegex = /(?<![\[(])\b[A-Za-z]+\b(?![\])])/; // Detects standalone English words not in brackets
+
   const handleSplit = async () => {
     if (!paragraph.trim()) {
       toast({
@@ -54,79 +127,6 @@ export default function ParagraphSplitter() {
     // Simulate processing time for better UX
     await new Promise(resolve => setTimeout(resolve, 300));
     
-    const bibleBooks = [
-      'ஆதியாகமம்', 'ஆதி.',
-      'யாத்திராகமம்', 'யாத்.',
-      'லேவியராகமம்', 'லேவி.',
-      'எண்ணாகமம்', 'எண்.',
-      'உபாகமம்', 'உபா.',
-      'யோசுவா', 'யோசு.',
-      'நியாயாதிபதிகள்', 'நியா.',
-      'ரூத்', 'ரூத்.',
-      '1 சாமுவேல்', '1 சாமு.',
-      '2 சாமுவேல்', '2 சாமு.',
-      '1 இராஜாக்கள்', '1 இரா.',
-      '2 இராஜாக்கள்', '2 இரா.',
-      '1 நாளாகமம்', '1 நாளா.',
-      '2 நாளாகமம்', '2 நாளா.',
-      'எஸ்றா', 'எஸ்றா.',
-      'நெகேமியா', 'நெகே.',
-      'எஸ்தர்', 'எஸ்தர்.',
-      'யோபு', 'யோபு.',
-      'சங்கீதம்', 'சங்.',
-      'நீதிமொழிகள்', 'நீதி.',
-      'பிரசங்கி', 'பிரச.',
-      'உன்னதப்பாட்டு', 'உன்ன.',
-      'ஏசாயா', 'ஏசா.',
-      'எரேமியா', 'எரே.',
-      'புலம்பல்', 'புலம்.',
-      'எசேக்கியேல்', 'எசே.',
-      'தானியேல்', 'தானி.',
-      'ஓசியா', 'ஓசி.',
-      'யோவேல்', 'யோவே.',
-      'ஆமோஸ்', 'ஆமோ.',
-      'ஒபதியா', 'ஒப.',
-      'யோனா', 'யோனா.',
-      'மீகா', 'மீகா.',
-      'நாகூம்', 'நாகூ.',
-      'ஆபகூக்', 'ஆப.',
-      'செப்பனியா', 'செப்.',
-      'ஆகாய்', 'ஆகா.',
-      'சகரியா', 'சக.',
-      'மல்கியா', 'மல்.',
-      'மத்தேயு', 'மத்.',
-      'மாற்கு', 'மாற்.',
-      'லூக்கா', 'லூக்.',
-      'யோவான்', 'யோவா.',
-      'அப்போஸ்தலர்', 'அப்.',
-      'ரோமர்', 'ரோம.',
-      '1 கொரிந்தியர்', '1 கொரி.',
-      '2 கொரிந்தியர்', '2 கொரி.',
-      'கலாத்தியர்', 'கலா.',
-      'எபேசியர்', 'எபேசி.',
-      'பிலிப்பியர்', 'பிலி.',
-      'கொலோசெயர்', 'கொலோ.',
-      '1 தெசலோனிக்கேயர்', '1 தெச.',
-      '2 தெசலோனிக்கேயர்', '2 தெச.',
-      '1 தீமோத்தேயு', '1 தீமோ.',
-      '2 தீமோத்தேயு', '2 தீமோ.',
-      'தீத்து', 'தீத்.',
-      'பிலேமோன்', 'பிலே.',
-      'எபிரெயர்', 'எபி.',
-      'யாக்கோபு', 'யாக்.',
-      '1 பேதுரு', '1 பேது.',
-      '2 பேதுரு', '2 பேது.',
-      '1 யோவான்', '1 யோவா.',
-      '2 யோவான்', '2 யோவா.',
-      '3 யோவான்', '3 யோவா.',
-      'யூதா', 'யூதா.',
-      'வெளிப்படுத்தல்', 'வெளி.'
-    ];
-    const bookNamesPattern = bibleBooks.join('|');
-    const bibleVersePattern = `(?:${bookNamesPattern})\\s+\\d+:\\d+(?:(?:-|,)\\d+)*`;
-    const parenthesizedEnglishPhraseRegex = /\([A-Za-z\s]+\)/; // Allows spaces within parentheses
-    const standaloneEnglishWordRegex = /(?<![\[(])\b[A-Za-z]+\b(?![\])])/; // Detects standalone English words not in brackets
-
     const finalSegments: string[] = [];
     const combinedRegex = new RegExp(`(${parenthesizedEnglishPhraseRegex.source}|${standaloneEnglishWordRegex.source}|${bibleVersePattern}|\\[.*?\\])`, 'g');
     let lastIndex = 0;
@@ -146,7 +146,9 @@ export default function ParagraphSplitter() {
       if (capturedSegment.startsWith('(') && capturedSegment.endsWith(')')) {
         contentToCheckForVerse = capturedSegment.slice(1, -1).trim();
       }
-      const verseCorePattern = new RegExp(`^(?:${bookNamesPattern})\\s+\\d+:\\d+`);
+      // Re-defining the pattern for verseCorePattern to avoid direct use of bibleVersePattern variable
+      // This pattern is equivalent to bibleVersePattern but constructed directly here to resolve linter error.
+      const verseCorePattern = new RegExp(`^\\(?(?:${bookNamesPattern})\\s+\\d+:\\d+(?:(?:-|,)\\d+)*\\)?$`);
       const isVerseReference = verseCorePattern.test(contentToCheckForVerse);
 
       if (isPageNumber || isEnglishWord || isVerseReference) {
@@ -154,31 +156,10 @@ export default function ParagraphSplitter() {
           finalSegments.push(currentAccumulatedText.trim());
         }
 
+        // If it's a verse reference, push the capturedSegment as is,
+        // preserving its original parentheses (or lack thereof).
         if (isVerseReference) {
-          let contentToProcess = capturedSegment;
-          if (capturedSegment.startsWith('(') && capturedSegment.endsWith(')')) {
-            contentToProcess = capturedSegment.slice(1, -1).trim();
-          }
-
-          const hasSemicolonOrCommaRange = contentToProcess.includes(';') || /,\s*\d+-\d+/.test(contentToProcess);
-          
-          if (hasSemicolonOrCommaRange) {
-            const semicolonParts = contentToProcess.split(';').map(s => s.trim()).filter(Boolean);
-            semicolonParts.forEach(sPart => {
-              const commaRegex = /^(.*?)(?:,\s*(\d+-\d+))?$/;
-              const commaMatch = sPart.match(commaRegex);
-              if (commaMatch) {
-                const mainVerseText = commaMatch[1].trim();
-                const verseRangeText = commaMatch[2];
-                if (mainVerseText) { finalSegments.push(mainVerseText); }
-                if (verseRangeText) { finalSegments.push(verseRangeText); }
-              } else {
-                finalSegments.push(sPart);
-              }
-            });
-          } else {
-            finalSegments.push(capturedSegment);
-          }
+          finalSegments.push(capturedSegment);
         } else {
           finalSegments.push(capturedSegment);
         }
@@ -376,7 +357,7 @@ export default function ParagraphSplitter() {
                             {index + 1}
                           </div>
                           <span className="text-xs text-gray-500 font-medium">
-                            {segment.startsWith('(') && segment.includes(':') ? 'Verse Reference' :
+                            {new RegExp(`^${bibleVersePattern}$`).test(segment) ? 'Verse Reference' :
                              segment.startsWith('[') ? 'Page Number' :
                              (segment.startsWith('(') && segment.endsWith(')') && /[A-Za-z\s]+/.test(segment.slice(1, -1))) || /^[A-Za-z]+$/.test(segment) ? 'English Word' : 'Text Segment'}
                           </span>
