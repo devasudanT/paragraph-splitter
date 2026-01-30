@@ -18,6 +18,10 @@ export default function ParagraphSplitter() {
   const { handleClick, handleFocus } = useAutoPaste({
     showToast: false,
     onlyWhenEmpty: true,
+    onPaste: (pastedText) => {
+      // Auto-split after paste
+      handleSplitWithText(pastedText);
+    },
   });
 
   React.useEffect(() => {
@@ -119,8 +123,8 @@ export default function ParagraphSplitter() {
   const parenthesizedEnglishPhraseRegex = /\([A-Za-z\s]+\)/; // Allows spaces within parentheses
   const standaloneEnglishWordRegex = /(?<![\[(])\b[A-Za-z]+\b(?![\])])/; // Detects standalone English words not in brackets
 
-  const handleSplit = async () => {
-    if (!paragraph.trim()) {
+  const handleSplitWithText = async (textToSplit: string) => {
+    if (!textToSplit.trim()) {
       toast({
         title: "No text to split",
         description: "Please enter some text to split",
@@ -140,8 +144,8 @@ export default function ParagraphSplitter() {
     let currentAccumulatedText = '';
     let match: RegExpExecArray | null;
 
-    while ((match = combinedRegex.exec(paragraph)) !== null) {
-      currentAccumulatedText += paragraph.substring(lastIndex, match.index);
+    while ((match = combinedRegex.exec(textToSplit)) !== null) {
+      currentAccumulatedText += textToSplit.substring(lastIndex, match.index);
       const capturedSegment = match[0];
 
       const isPageNumber = /^\[[^\]]*\]$/.test(capturedSegment);
@@ -177,7 +181,7 @@ export default function ParagraphSplitter() {
       lastIndex = combinedRegex.lastIndex;
     }
 
-    currentAccumulatedText += paragraph.substring(lastIndex);
+    currentAccumulatedText += textToSplit.substring(lastIndex);
     if (currentAccumulatedText.trim().length > 0) {
       finalSegments.push(currentAccumulatedText.trim());
     }
@@ -189,6 +193,10 @@ export default function ParagraphSplitter() {
       title: "Split complete!",
       description: `Split into ${finalSegments.length} segments`,
     });
+  };
+
+  const handleSplit = async () => {
+    await handleSplitWithText(paragraph);
   };
 
   const copyToClipboard = (text: string) => {
