@@ -1,17 +1,24 @@
 'use client';
 
 import React from 'react';
-import { Copy, Scissors, FileText, Sparkles } from 'lucide-react';
+import { Copy, Scissors, FileText, Sparkles, ClipboardPaste } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
+import { useAutoPaste } from '@/hooks/use-auto-paste';
 
 export default function ParagraphSplitter() {
   const [paragraph, setParagraph] = React.useState('');
   const [splitSegments, setSplitSegments] = React.useState<string[]>([]);
   const [isSplitting, setIsSplitting] = React.useState(false);
   const { toast } = useToast();
+
+  // Auto-paste hook for clipboard functionality
+  const { handleClick, handleFocus } = useAutoPaste({
+    showToast: false,
+    onlyWhenEmpty: true,
+  });
 
   React.useEffect(() => {
     // Import Tiro Tamil font
@@ -123,10 +130,10 @@ export default function ParagraphSplitter() {
     }
 
     setIsSplitting(true);
-    
+
     // Simulate processing time for better UX
     await new Promise(resolve => setTimeout(resolve, 300));
-    
+
     const finalSegments: string[] = [];
     const combinedRegex = new RegExp(`(${parenthesizedEnglishPhraseRegex.source}|${standaloneEnglishWordRegex.source}|${bibleVersePattern}|\\[.*?\\])`, 'g');
     let lastIndex = 0;
@@ -177,7 +184,7 @@ export default function ParagraphSplitter() {
 
     setSplitSegments(finalSegments);
     setIsSplitting(false);
-    
+
     toast({
       title: "Split complete!",
       description: `Split into ${finalSegments.length} segments`,
@@ -192,7 +199,7 @@ export default function ParagraphSplitter() {
       textarea.select();
       document.execCommand('copy');
       document.body.removeChild(textarea);
-      
+
       toast({
         title: "Copied!",
         description: "Text copied to clipboard",
@@ -215,7 +222,7 @@ export default function ParagraphSplitter() {
       textarea.select();
       document.execCommand('copy');
       document.body.removeChild(textarea);
-      
+
       toast({
         title: "All copied!",
         description: "All segments copied to clipboard",
@@ -269,16 +276,28 @@ export default function ParagraphSplitter() {
               Enter your Tamil paragraph below. The system will automatically detect and split Bible verses, page numbers, and English words.
             </CardDescription>
           </CardHeader>
-          
+
           <CardContent className="space-y-4">
-            <Textarea
-              className="w-full p-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-y min-h-[180px] text-base transition-all duration-200 hover:border-gray-300"
-              placeholder="Paste your Tamil paragraph here..."
-              value={paragraph}
-              onChange={(e) => setParagraph(e.target.value)}
-              style={{ fontFamily: '"Tiro Tamil", serif' }}
-            />
-            
+            <div className="relative">
+              <Textarea
+                className="w-full p-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-y min-h-[180px] text-base transition-all duration-200 hover:border-gray-300 cursor-pointer"
+                placeholder="Click here to auto-paste from clipboard, or type/paste your Tamil paragraph..."
+                value={paragraph}
+                onChange={(e) => setParagraph(e.target.value)}
+                onClick={() => handleClick(paragraph, setParagraph)}
+                onFocus={() => handleFocus(paragraph, setParagraph)}
+                style={{ fontFamily: '"Tiro Tamil", serif' }}
+              />
+              {paragraph === '' && (
+                <div className="absolute top-4 right-4 pointer-events-none">
+                  <div className="flex items-center gap-1.5 text-gray-400 text-sm bg-white/80 px-2 py-1 rounded-md border border-gray-200">
+                    <ClipboardPaste className="w-4 h-4" />
+                    <span>Click to paste</span>
+                  </div>
+                </div>
+              )}
+            </div>
+
             <div className="flex gap-3">
               <Button
                 className="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-3 px-6 rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 font-semibold shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
@@ -298,7 +317,7 @@ export default function ParagraphSplitter() {
                   </div>
                 )}
               </Button>
-              
+
               <Button
                 variant="outline"
                 className="px-6 py-3 rounded-xl border-2 border-gray-200 hover:border-gray-300 transition-all duration-200"
@@ -329,7 +348,7 @@ export default function ParagraphSplitter() {
                     </CardDescription>
                   </div>
                 </div>
-                
+
                 <Button
                   variant="outline"
                   size="sm"
@@ -341,12 +360,12 @@ export default function ParagraphSplitter() {
                 </Button>
               </div>
             </CardHeader>
-            
+
             <CardContent>
               <div className="space-y-4 max-h-96 overflow-y-auto pr-2 custom-scrollbar">
                 {splitSegments.map((segment, index) => (
-                  <Card 
-                    key={index} 
+                  <Card
+                    key={index}
                     className="group bg-gradient-to-br from-gray-50 to-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-all duration-200 hover:border-blue-300 hover:-translate-y-0.5 animate-fade-in"
                     style={{ animationDelay: `${index * 50}ms` }}
                   >
@@ -358,15 +377,15 @@ export default function ParagraphSplitter() {
                           </div>
                           <span className="text-xs text-gray-500 font-medium">
                             {new RegExp(`^${bibleVersePattern}$`).test(segment) ? 'Verse Reference' :
-                             segment.startsWith('[') ? 'Page Number' :
-                             (segment.startsWith('(') && segment.endsWith(')') && /[A-Za-z\s]+/.test(segment.slice(1, -1))) || /^[A-Za-z]+$/.test(segment) ? 'English Word' : 'Text Segment'}
+                              segment.startsWith('[') ? 'Page Number' :
+                                (segment.startsWith('(') && segment.endsWith(')') && /[A-Za-z\s]+/.test(segment.slice(1, -1))) || /^[A-Za-z]+$/.test(segment) ? 'English Word' : 'Text Segment'}
                           </span>
                         </div>
                         <p className="text-gray-800 text-base leading-relaxed break-words" style={{ fontFamily: '"Tiro Tamil", serif' }}>
                           {segment}
                         </p>
                       </div>
-                      
+
                       <Button
                         variant="ghost"
                         size="sm"
